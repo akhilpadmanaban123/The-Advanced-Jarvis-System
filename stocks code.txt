@@ -1,0 +1,47 @@
+###to input the company name, ticker name ,start month,data,end month,end date
+
+
+
+import yfinance as yf
+import matplotlib.pyplot as plt
+
+def plot_stock_graph(ticker, company, start_date, end_date):
+    # Fetch stock data using yfinance
+    stock_data = yf.download(ticker, start=start_date, end=end_date)
+
+    # Extract the 'Close' prices
+    close_prices = stock_data['Close']
+
+    # Calculate Simple Moving Average (SMA)
+    sma = close_prices.rolling(window=50).mean()  # Using a 20-day window as an example
+
+    # Plotting the stock graph and SMA
+    plt.figure(figsize=(10, 6))
+    plt.plot(close_prices, label='Stock Price')
+    plt.plot(sma, label='SMA (20 days)')
+    plt.title(f"Stock Graph for {company} ({ticker})")
+    plt.xlabel('Date')
+    plt.ylabel('Closing Price')
+    plt.grid(True)
+    plt.legend()
+    plt.show()
+
+# Example usage
+companies = []
+
+num_companies = input("Enter the number of companies: ")
+
+for _ in range(int(num_companies)):
+    company = input("Enter the company name: ")
+    ticker = input("Enter the ticker symbol: ")
+    companies.append((company, ticker))
+
+for company, ticker in companies:
+    print(f"Enter the date range for {company} ({ticker}) stock data:")
+    start_month = input("Enter the start month (MM): ")
+    start_day = input("Enter the start day (DD): ")
+    end_month = input("Enter the end month (MM): ")
+    end_day = input("Enter the end day (DD): ")
+    start_date = f"2022-{start_month.zfill(2)}-{start_day.zfill(2)}"
+    end_date = f"2022-{end_month.zfill(2)}-{end_day.zfill(2)}"
+    plot_stock_graph(ticker, company, start_date, end_date)
